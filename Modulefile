@@ -1,4 +1,4 @@
-name 'nm-thin'
+name 'netmanagers-thin'
 version '0.0.1'
 
 author 'Javier Bertoli'
