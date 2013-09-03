@@ -258,7 +258,6 @@ class thin (
   $bool_firewall=any2bool($firewall)
   $bool_debug=any2bool($debug)
   $bool_audit_only=any2bool($audit_only)
-  $bool_noops=any2bool($noops)
 
   ### Definition of some variables used in the module
   $manage_package = $thin::bool_absent ? {
@@ -333,7 +332,7 @@ class thin (
   ### Managed resources
   package { $thin::package:
     ensure  => $thin::manage_package,
-    noop    => $thin::bool_noops,
+    noop    => $thin::noops,
   }
 
   service { 'thin':
@@ -343,7 +342,7 @@ class thin (
     hasstatus  => $thin::service_status,
     pattern    => $thin::process,
     require    => Package[$thin::package],
-    noop       => $thin::bool_noops,
+    noop       => $thin::noops,
   }
 
   file { 'thin.conf':
@@ -358,7 +357,7 @@ class thin (
     content => $thin::manage_file_content,
     replace => $thin::manage_file_replace,
     audit   => $thin::manage_audit,
-    noop    => $thin::bool_noops,
+    noop    => $thin::noops,
   }
 
   # The whole thin configuration directory can be recursively overriden
@@ -374,7 +373,7 @@ class thin (
       force   => $thin::bool_source_dir_purge,
       replace => $thin::manage_file_replace,
       audit   => $thin::manage_audit,
-      noop    => $thin::bool_noops,
+      noop    => $thin::noops,
     }
   }
 
@@ -392,7 +391,7 @@ class thin (
       ensure    => $thin::manage_file,
       variables => $classvars,
       helper    => $thin::puppi_helper,
-      noop      => $thin::bool_noops,
+      noop      => $thin::noops,
     }
   }
 
@@ -406,7 +405,7 @@ class thin (
         target   => $thin::monitor_target,
         tool     => $thin::monitor_tool,
         enable   => $thin::manage_monitor,
-        noop     => $thin::bool_noops,
+        noop     => $thin::noops,
       }
     }
     if $thin::service != '' {
@@ -418,7 +417,7 @@ class thin (
         argument => $thin::process_args,
         tool     => $thin::monitor_tool,
         enable   => $thin::manage_monitor,
-        noop     => $thin::bool_noops,
+        noop     => $thin::noops,
       }
     }
   }
@@ -435,7 +434,7 @@ class thin (
       direction   => 'input',
       tool        => $thin::firewall_tool,
       enable      => $thin::manage_firewall,
-      noop        => $thin::bool_noops,
+      noop        => $thin::noops,
     }
   }
 
@@ -449,7 +448,7 @@ class thin (
       owner   => 'root',
       group   => 'root',
       content => inline_template('<%= scope.to_hash.reject { |k,v| k.to_s =~ /(uptime.*|path|timestamp|free|.*password.*|.*psk.*|.*key)/ }.to_yaml %>'),
-      noop    => $thin::bool_noops,
+      noop    => $thin::noops,
     }
   }
 
